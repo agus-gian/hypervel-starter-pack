@@ -18,36 +18,21 @@ class UserService
      * Create user member
      * @throws Throwable
      */
-    public function createUser(Request $request): array
+    public function createUser(Request $request)
     {
-        try {
-            $user = DB::transaction(function () use ($request) {
-                $user = new User();
-                $user->name = $request->input('name');
-                $user->email = $request->input('email');
-                $user->password = Hash::make($request->input('password'));
-                $user->save();
+        return DB::transaction(function () use ($request) {
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
 
-                $user->assignRole('member');
+            $user->assignRole('member');
 
-                return $user;
-            });
+            $user->sendEmailVerificationNotification();
 
-            $apiToken = config('services.app_api.token');
-
-            $accessToken = $user->createToken("{$apiToken}:{$user->email}")->plainTextToken;
-
-            return [
-                'user' => $user,
-                'token' => $accessToken,
-            ];
-        } catch (Throwable $e) {
-
-            Log::error('Error Change Password', [$e]);
-
-            throw $e;
-
-        }
+            return $user;
+        });
     }
 
     /**

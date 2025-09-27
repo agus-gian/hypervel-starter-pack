@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\MustVerifyEmail;
 use Hypervel\Database\Eloquent\Factories\HasFactory;
 use Hypervel\Database\Eloquent\SoftDeletes;
 use Hypervel\Foundation\Auth\User as Authenticatable;
@@ -13,7 +14,7 @@ use Hypervel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, HasRole, HasApiTokens, Notifiable, SoftDeletes;
+    use HasFactory, HasRole, HasApiTokens, Notifiable, SoftDeletes, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -33,15 +34,6 @@ class User extends Authenticatable
     /**
      * Function
      */
-    public function hasEmailVerified(): bool
-    {
-        if (!empty($this->email_verified_at)) {
-            return true;
-        }
-
-        return false;
-    }
-
     public function profilePictureUrl(): string
     {
         if (!empty($this->profile_picture_url)) {

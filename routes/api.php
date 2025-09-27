@@ -13,8 +13,11 @@ use Hypervel\Support\Facades\Route;
 Route::group('/auth', function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+
+    //TODO : create endpoint to resend mail verification & forgot password
 });
 
 Route::group('/user', function () {
     Route::get('/{id}/profile', [UserController::class, 'profile']);
-}, ['middleware' => 'auth:sanctum', RoleMiddleware::using('member')]);
+    Route::get('/my-profile', [UserController::class, 'myProfile']);
+}, ['middleware' => ['auth:sanctum', RoleMiddleware::using('member')]]);

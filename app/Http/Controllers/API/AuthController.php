@@ -28,15 +28,11 @@ class AuthController
         try {
             $registerResponse = $this->userService->createUser($request);
 
-            $access_token = $registerResponse['token'];
-            $userDetail = (new UserDetailResource($registerResponse['user']))->withoutWrapping();
+            $userDetail = (new UserDetailResource($registerResponse))->withoutWrapping();
 
             return response()->json([
                 'message' => 'Register successfully',
-                'data' => [
-                    'access_token' => $access_token,
-                    'user' => $userDetail,
-                ]
+                'data' => $userDetail
             ]);
 
         } catch (Throwable $throwable) {

@@ -27,4 +27,7 @@ return [
             'model' => App\Models\User::class,
         ],
     ],
+    'verification' => [
+        'expire' => (int) env('AUTH_VERIFICATION_TIMEOUT', 60)
+    ],
 ];

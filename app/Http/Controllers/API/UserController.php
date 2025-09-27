@@ -6,8 +6,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Resources\User\UserDetailResource;
 use App\Services\UserService;
+use Hypervel\Support\Facades\Auth;
 use Psr\Http\Message\ResponseInterface as ResponseInterfaceAlias;
-
 //use Hypervel\Http\Request;
 
 class UserController
@@ -35,5 +35,12 @@ class UserController
             ],$e->getCode());
 
         }
+    }
+
+    public function myProfile(): UserDetailResource
+    {
+        $authUser = Auth::user();
+
+        return (new UserDetailResource($authUser))->withoutWrapping();
     }
 }
