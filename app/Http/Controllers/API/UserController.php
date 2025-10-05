@@ -8,6 +8,8 @@ use App\Http\Resources\User\UserDetailResource;
 use App\Services\UserService;
 use Hypervel\Support\Facades\Auth;
 use Psr\Http\Message\ResponseInterface as ResponseInterfaceAlias;
+use Throwable;
+
 //use Hypervel\Http\Request;
 
 class UserController
@@ -27,7 +29,7 @@ class UserController
 
             return (new UserDetailResource($detailUser))->withoutWrapping();
 
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
 
             return response()->json([
                 'code' => $e->getCode(),

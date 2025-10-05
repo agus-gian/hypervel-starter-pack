@@ -10,11 +10,13 @@ use Hypervel\Support\Facades\Route;
 
 //Route::any('/', [IndexController::class, 'index']);
 
+//TODO : create endpoint forgot password
+
 Route::group('/auth', function () {
+    Route::post('/email/verify/resend', [AuthController::class, 'resendVerificationEmail']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
-
-    //TODO : create endpoint to resend mail verification & forgot password
 });
 
 Route::group('/user', function () {

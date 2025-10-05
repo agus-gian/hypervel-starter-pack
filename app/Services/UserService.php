@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\User;
+use App\Notifications\VerifyEmail;
 use Hypervel\Http\Request;
+use Hypervel\Support\Carbon;
 use Hypervel\Support\Facades\DB;
 use Hypervel\Support\Facades\Hash;
 use Hypervel\Support\Facades\Log;
+use Hypervel\Validation\ValidationException;
 use Throwable;
 use Exception;
 
@@ -29,7 +32,7 @@ class UserService
 
             $user->assignRole('member');
 
-            $user->sendEmailVerificationNotification();
+            $user->notify(new VerifyEmail);
 
             return $user;
         });

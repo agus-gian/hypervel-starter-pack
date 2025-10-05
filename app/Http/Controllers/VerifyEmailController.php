@@ -14,12 +14,12 @@ class VerifyEmailController
     /**
      * Verify E-mail Handler.
      */
-    public function __invoke(Request $request): string
+    public function __invoke(Request $request)
     {
         $user = User::findOrFail($request->route('id'));
 
         $user->markEmailAsVerified();
 
-        return route('verification.verify_success');
+        return to_route('verification.verify_success');
     }
 }

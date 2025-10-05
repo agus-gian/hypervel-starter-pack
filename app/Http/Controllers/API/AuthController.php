@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResendVerificationEmailRequest;
 use App\Http\Resources\User\UserDetailResource;
 use App\Services\AuthService;
 use App\Services\UserService;
@@ -40,7 +42,7 @@ class AuthController
             return response()->json([
                 'message' => $throwable->getMessage(),
                 'data' => []
-            ], $throwable->getCode());
+            ], 500);
 
         }
     }
@@ -75,7 +77,69 @@ class AuthController
             return response()->json([
                 'message' => $throwable->getMessage(),
                 'data' => []
-            ], $throwable->getCode());
+            ], 500);
+
+        }
+    }
+
+    /**
+     * Resend Verification Email
+     */
+    public function resendVerificationEmail(ResendVerificationEmailRequest $request): ResponseInterface
+    {
+        try {
+            $this->authService->handleResendVerificationEmail($request);
+
+            return response()->json([
+                'message' => 'Verification email sent',
+                'data' => [
+                    'email' => $request->input('email')
+                ]
+            ]);
+
+        } catch (ValidationException $e) {
+
+            return response()->json([
+                'message' => 'Invalid data',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (Throwable $throwable) {
+
+            return response()->json([
+                'message' => $throwable->getMessage(),
+                'data' => []
+            ], 500);
+
+        }
+    }
+
+    /**
+     * Forgot Password
+     */
+    public function forgotPassword(ForgotPasswordRequest $request): ResponseInterface
+    {
+        try {
+            $response = $this->authService->handleForgotPassword($request);
+
+            return response()->json([
+                'message' => 'Forgot password successfully',
+                'data' => $response
+            ]);
+
+        } catch (ValidationException $e) {
+
+            return response()->json([
+                'message' => 'Invalid data',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (Throwable $throwable) {
+
+            return response()->json([
+                'message' => $throwable->getMessage(),
+                'data' => []
+            ], 500);
 
         }
     }

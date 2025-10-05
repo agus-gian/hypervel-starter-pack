@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests\Auth;
 
 use Hypervel\Foundation\Http\FormRequest;
-use Hypervel\Validation\Rule;
-use Hypervel\Validation\Rules\Password;
 
-class LoginRequest extends FormRequest
+class ResendVerificationEmailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +24,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => [
                 'required',
-                'string',
-                'email'
-            ],
-            'password' => [
-                'required',
-                Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised(),
+                'email',
             ]
         ];
     }
