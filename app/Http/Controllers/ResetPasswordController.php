@@ -10,10 +10,15 @@ use Hypervel\Support\Carbon;
 use Hypervel\Support\Facades\DB;
 use Hypervel\Support\Facades\Hash;
 use Hypervel\Validation\Rules\Password;
+use Hypervel\Validation\ValidationException;
+use Psr\Http\Message\ResponseInterface;
 
 class ResetPasswordController
 {
-    public function reset(Request $request)
+    /**
+     * @throws ValidationException
+     */
+    public function reset(Request $request): ResponseInterface
     {
         $request->validate([
             'email' => 'required|string|email',
